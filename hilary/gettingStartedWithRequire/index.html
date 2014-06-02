@@ -88,7 +88,7 @@ require(['hilary', 'mock-ajax', 'model', 'view', 'controller'],
 
 		// resolve myController and inject our _mockAjax singleton, 
 		// model factory and view factory into it. In a non-test 
-		// scenario, we would pass in $.ajax instead of _mockAjax.
+		// scenario, we would inject $.ajax instead of _mockAjax.
 		_controller = hilary.resolve('myController')
 			.call(null, 
 				_mockAjax, 

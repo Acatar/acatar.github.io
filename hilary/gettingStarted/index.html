@@ -106,7 +106,8 @@ hilary.use([hilary, jQuery, ko], function(hilarysInnerContainer, hilary, $, ko) 
 
 	// Resolve myController and inject our _mockAjax singleton, 
 	// an instance of the model factory and an instance of the 
-	// view factory into it
+	// view factory into it.
+	// In a non-test scenario, we would inject $.ajax instead of _mockAjax
 	_controller = hilary.resolve('myController')
 		.call(null, _mockAjax, 
 			hilary.resolve('myModel').call(), 
