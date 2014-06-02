@@ -1,0 +1,1 @@
+define("mock-ajax",["jquery"],function(e){var n,r,t,o;n=new e.Deferred,r=n.then(function(e){return e}),t=new e.Deferred,o=t.then(function(e,r){setTimeout(function(){n.resolve(e)},r)}),hilary.register("mock-ajax",{makePromise:function(e,n){return function(o){return t.resolve(e,n),r}}})});

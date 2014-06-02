@@ -1,0 +1,1 @@
+hilary.register("myController",function(n,r,i){return{view:function(){return n({url:"foo/bar/12",method:"GET"}).done(function(n){var t=r.init(n);i.init(t)})}}});

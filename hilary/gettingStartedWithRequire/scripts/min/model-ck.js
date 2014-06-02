@@ -1,0 +1,1 @@
+define("model",["hilary","ko"],function(r,e){"use strict";var t=function(r){var t={};return t.id=e.observable(r.id),t.name=e.observable(r.name),t};r.register("myModel",function(){return{init:function(r){if("[object Array]"!==Object.prototype.toString.call(r))throw Error("a users array was expected");var e={users:[]};for(var n in r)e.users.push(t(r[n]));return e}}})});

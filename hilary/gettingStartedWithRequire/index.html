@@ -1,0 +1,139 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Acatar Open Source : " />
+	<title>Hi, I'm Hilary</title>
+    
+    <link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/stylesheet.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="//cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.css" />
+
+    <style type="text/css">
+    	.example {
+    		background-color: white;
+			border: 1px solid #ddd;
+			border-radius: 2px;
+    	}
+    	.example .comments {
+    		background-color: #f2f2f2;
+    		border-bottom: 1px solid #ddd;
+    		padding: 5px;
+    	}
+    	.example .content {
+    		margin: 5px;
+    	}
+    </style>
+  </head>
+
+  <body>
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Acatar/hilaryjs">View on GitHub</a>
+
+          <h1 id="project_title">Getting started with hilary.js</h1>
+          <h2 id="project_tagline"></h2>
+
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+		<p>hello, I'm Hilary => a simple JavaScript IoC container.</p>
+
+		<p>
+			In this example, we use hilary with AMD (Asynchronous Module Definition): namely, require.js.
+		</p> 
+		<p>
+			We have a single Model View Controller structure that is tied together with a composition root.  We also mock jQuery ajax, to get data into the model, without going ot the server, to further display the uses of the IoC container.
+		</p>
+
+		<div class="example">
+			<div class="comments">output from the example:</div>
+			<div id="userExample" class="content" data-bind="foreach: users">
+				<p>
+					<i data-bind="text: id"></i>::
+					<i data-bind="text: name"></i>
+				</p>
+			</div>
+		</div>
+		<p>
+			I'm not going to get into what <a href="http://blog.ploeh.dk/2011/07/28/CompositionRoot/">Compsition Root</a> is, but if you are unfamiliar with the term, <a href="http://blog.ploeh.dk/">Mark Seeman</a> and his book, 
+			<a href="http://www.amazon.com/gp/product/1935182501/ref=as_li_ss_tl?ie=UTF8&camp=1789&creative=390957&creativeASIN=1935182501&linkCode=as2&tag=ploeh-20">Dependency Injection in .NET</a> should be your goto reference. 
+		</p>
+		<p>
+			In a transactional app, each page might have a Composition Root, although your app would likely be easier to 
+			maintain if you follow the same pattern that makes sense in a SPA, which would be to have a single Composition Root
+			file. I tend to name our Composition Root compositionRoot.js, startup.js or appStart.js.
+		</p>
+		<p>Let's take a look at the Composition Root for this example, to figure out how it works:</p>
+<pre class="prettyprint">
+// Using AMD, our modules registered with some of their dependencies already 
+// resolved. That's a bit of mix-and-match, and you could avoid it by only 
+// defining factories. Personally, I would go that route, but this example 
+// assumes you are already steeped in AMD, so I'm going for a realistic scenario.
+
+require(['hilary', 'mock-ajax', 'model', 'view', 'controller'], 
+	function(hilary, mockAjax, myModel, myView, myController) {
+		"use strict";
+
+		var _mockAjax, _model, _view, _controller;
+
+		// resolve a mock jQuery ajax service
+		// jQuery was already injected into it by require.js
+		_mockAjax = hilary.resolve('mock-ajax')
+			.makePromise([{ id: 1, name: 'Hilary Page' }, { id: 2, name: 'Ole Kirk Kristiansen' }], 40);
+
+		// resolve myController and inject our _mockAjax singleton, 
+		// model factory and view factory into it. In a non-test 
+		// scenario, we would pass in $.ajax instead of _mockAjax.
+		_controller = hilary.resolve('myController')
+			.call(null, 
+				_mockAjax, 
+				hilary.resolve('myModel').call(), 
+				hilary.resolve('myView').call());
+	});
+</pre>
+		<br />
+		<p>
+			So this app is made up of a model, a view and a controller.  It depends on jQuery and knockout (and hilary :).
+			We created four service modules: model.js, view.js, controller.js and mock-ajax.js.  All four of these services 
+			self-register themselves with hilary when they load.
+		</p>
+		<p>
+			In a compiled language, we would register interfaces and implementations in our Composition Root, but because 
+			JavaScript is not a compiled language, I decided self-registration was the way to go. During registration, 
+			all of the modules declare their dependencies, but these dependencies are unresolved at the time of registration.
+		</p>
+		<p>
+			In Composition Root, we not only resolve the services that we intend to use, but also inject appropriate dependencies.
+			In this example, we reference singletons: the composed services. When resolving "myController", all 3 dependencies are 
+			already-composed services.
+		</p>
+		<p>
+			By taking this approach, as you can see in this example, it is easy to swap out services for new ones, whether you 
+			are doing that for testing or refactoring.  The controller service uses jQuery ajax, but because we passed in 
+			a mock service that satisfies the signature, we are able to isolate behavior by changing a single module: compositionRoot.js.
+		</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+	<script src="/hilary/gettingStarted/scripts/hilary.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script src="http://ajax.aspnetcdn.com/ajax/knockout/knockout-3.1.0.debug.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/prettify/r298/run_prettify.min.js"></script>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.11/require.min.js"></script>
+    <script src="/hilary/gettingStartedWithRequire/scripts/requireShim.js"></script>
+    <script src="/hilary/gettingStartedWithRequire/scripts/compositionRoot.js"></script>
+  </body>
+</html>

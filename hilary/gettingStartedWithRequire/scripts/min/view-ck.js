@@ -1,0 +1,1 @@
+define("view",["hilary"],function(i){i.register("myView",function(){return{init:function(i){ko.applyBindings(i,$("userExample")[0])}}})});

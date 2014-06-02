@@ -1,0 +1,1 @@
+require(["hilary","mock-ajax","model","view","controller"],function(e,l,r,a,i){"use strict";var o,m,s,n;o=e.resolve("mock-ajax").makePromise([{id:1,name:"Hilary Page"},{id:2,name:"Ole Kirk Kristiansen"}],40),n=e.resolve("myController")(o,e.resolve("myModel").call(),e.resolve("myView").call()),n.view()});
