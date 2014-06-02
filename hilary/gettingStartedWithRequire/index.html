@@ -44,7 +44,8 @@
 		<p>hello, I'm hilary => a simple JavaScript IoC container.</p>
 
 		<p>
-			In this example, we use hilary with AMD (Asynchronous Module Definition): namely, require.js.
+			In this example (check out the <a href="https://github.com/Acatar/acatar.github.io/tree/master/hilary/gettingStartedWithRequire">
+			source</a>), we use hilary with AMD (Asynchronous Module Definition): namely, require.js.
 		</p> 
 		<p>
 			We have a single Model View Controller structure that is tied together with a composition root.  We also mock jQuery ajax, to get data into the model, without going ot the server, to further display the uses of the IoC container.
@@ -75,8 +76,8 @@
 // defining factories. Personally, I would go that route, but this example 
 // assumes you are already steeped in AMD, so I'm going for a realistic scenario.
 
-require(['hilary', 'mock-ajax', 'model', 'view', 'controller'], 
-	function(hilary, mockAjax, myModel, myView, myController) {
+define('compositionRoot', ['hilary', 'mock-ajax', 'model', 'view', 'controller'], 
+	function(hilary /*, mockAjax, myModel, myView, myController */) {
 		"use strict";
 
 		var _mockAjax, _model, _view, _controller;
@@ -94,6 +95,12 @@ require(['hilary', 'mock-ajax', 'model', 'view', 'controller'],
 				_mockAjax, 
 				hilary.resolve('myModel').call(), 
 				hilary.resolve('myView').call());
+
+		return {
+			start: function() {
+				_controller.view();
+			}
+		};
 	});
 </pre>
 		<br />
@@ -135,5 +142,11 @@ require(['hilary', 'mock-ajax', 'model', 'view', 'controller'],
     <script src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.11/require.min.js"></script>
     <script src="/hilary/gettingStartedWithRequire/scripts/requireShim.js"></script>
     <script src="/hilary/gettingStartedWithRequire/scripts/compositionRoot.js"></script>
+
+    <script>
+    	require(['compositionRoot'], function(startup) {
+    		startup.start();
+    	});
+    </script>
   </body>
 </html>
