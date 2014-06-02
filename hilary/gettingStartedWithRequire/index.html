@@ -80,7 +80,7 @@ define('compositionRoot', ['hilary', 'mock-ajax', 'model', 'view', 'controller']
 	function(hilary /*, mockAjax, myModel, myView, myController */) {
 		"use strict";
 
-		var _mockAjax, _model, _view, _controller;
+		var _mockAjax, _controller;
 
 		// resolve a mock jQuery ajax service
 		// jQuery was already injected into it by require.js
@@ -90,15 +90,17 @@ define('compositionRoot', ['hilary', 'mock-ajax', 'model', 'view', 'controller']
 		// resolve myController and inject our _mockAjax singleton, 
 		// model factory and view factory into it. In a non-test 
 		// scenario, we would inject $.ajax instead of _mockAjax.
-		_controller = hilary.resolve('myController')
-			.call(null, 
-				_mockAjax, 
-				hilary.resolve('myModel').call(), 
-				hilary.resolve('myView').call());
+		_controller = function() {
+			hilary.resolve('myController')
+				.call(null, 
+					_mockAjax, 
+					hilary.resolve('myModel').call(), 
+					hilary.resolve('myView').call());
+		};
 
 		return {
 			start: function() {
-				_controller.view();
+				_controller().view();
 			}
 		};
 	});
