@@ -113,18 +113,18 @@ define('compositionRoot', ['hilary', 'mock-ajax', 'model', 'view', 'controller']
 		</p>
 		<p>
 			In a compiled language, we would register interfaces and implementations in our Composition Root, but because 
-			JavaScript is not a compiled language, I decided self-registration was the way to go. During registration, 
+			JavaScript is not a compiled language, I took a cue from AMD and decided on  self-registration. During registration, 
 			all of the modules declare their dependencies, but these dependencies are unresolved at the time of registration.
 		</p>
 		<p>
 			In Composition Root, we not only resolve the services that we intend to use, but also inject appropriate dependencies.
-			In this example, we reference singletons: the composed services. When resolving "myController", all 3 dependencies are 
-			already-composed services.
+			In this example, we reference a singleton (_mockAjax) and two factories: the composed model and view services. We resolve 
+			"myController" with three, already-composed services.
 		</p>
 		<p>
-			By taking this approach, as you can see in this example, it is easy to swap out services for new ones, whether you 
-			are doing that for testing or refactoring.  The controller service uses jQuery ajax, but because we passed in 
-			a mock service that satisfies the signature, we are able to isolate behavior by changing a single module: compositionRoot.js.
+			By taking this approach, it is easy to swap out services for new ones. This can be useful in testing, refactoring, 
+			reuse, etc. The controller service uses jQuery ajax, but because we passed in a mock service that satisfies the 
+			signature, we are able to isolate behavior by changing a single module: compositionRoot.js.
 		</p>
       </section>
     </div>
