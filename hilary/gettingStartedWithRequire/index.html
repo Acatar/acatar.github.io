@@ -91,7 +91,7 @@ define('compositionRoot', ['hilary', 'mock-ajax', 'model', 'view', 'controller']
 		// model factory and view factory into it. In a non-test 
 		// scenario, we would inject $.ajax instead of _mockAjax.
 		_controller = function() {
-			hilary.resolve('myController')
+			return hilary.resolve('myController')
 				.call(null, 
 					_mockAjax, 
 					hilary.resolve('myModel').call(), 
