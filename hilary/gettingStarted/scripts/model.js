@@ -1,4 +1,4 @@
-hilary.register('myModelCtor', function(ko) {
+hilary.register('myModelCtor', { init: function(ko) {
 	"use strict";
 	var makeUser = function(data) {
 			var _self = {};
@@ -10,7 +10,7 @@ hilary.register('myModelCtor', function(ko) {
 		};
 
 	return {
-		init: function (data) {
+		cast: function (data) {
 			if (Object.prototype.toString.call(data) !== '[object Array]')
 				throw Error('a users array was expected');
 
@@ -23,4 +23,4 @@ hilary.register('myModelCtor', function(ko) {
 			return _users;
 		}
 	};
-});
+}});

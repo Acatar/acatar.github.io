@@ -1,4 +1,4 @@
-hilary.register('mock-ajax', function($) {
+hilary.register('mock-ajax', { init: function($) {
     var _defer, _promise, _realDefer, _realPromise;
 
     _defer = new $.Deferred();
@@ -21,4 +21,4 @@ hilary.register('mock-ajax', function($) {
 			};
 		}
 	};
-});
+}});
