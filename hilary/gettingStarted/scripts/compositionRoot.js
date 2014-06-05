@@ -26,8 +26,8 @@ hilary.use([hilary, jQuery, ko, window], function(hilarysInnerContainer, hilary,
 	// In a non-test scenario, we would inject $.ajax instead of _mockAjax
 	_controller = hilary.resolve('myController')
 		.init(_mockAjax, 
-			hilary.resolve('myModelCtor').init(ko), 
-			hilary.resolve('myViewCtor').init($, ko));
+			hilary.resolve('myModel').init(ko), 
+			hilary.resolve('myView').init($, ko));
 
 	window.example = {
 		load: function() {

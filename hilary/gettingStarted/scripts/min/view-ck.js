@@ -1,1 +1,1 @@
-hilary.register("myViewCtor",{init:function(i,n){return{bindTo:function(r){n.applyBindings(r,i("userExample")[0])}}}});
+hilary.register("myView",{init:function(i,n){return{bindTo:function(e){n.applyBindings(e,i("userExample")[0])}}}});

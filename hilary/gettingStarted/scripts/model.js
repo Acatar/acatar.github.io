@@ -1,4 +1,4 @@
-hilary.register('myModelCtor', { init: function(ko) {
+hilary.register('myModel', { init: function(ko) {
 	"use strict";
 	var makeUser = function(data) {
 			var _self = {};
