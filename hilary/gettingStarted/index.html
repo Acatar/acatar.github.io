@@ -100,12 +100,6 @@ hilary.use([hilary, jQuery, ko, window], function(hilarysInnerContainer, hilary,
 		.init(_mockAjax, 
 			hilary.resolve('myModelCtor').init(ko), 
 			hilary.resolve('myViewCtor').init($, ko));
-
-	window.example = {
-		load: function() {
-			_controller.view();
-		}
-	};	
 });
 </pre>
 		<br />
