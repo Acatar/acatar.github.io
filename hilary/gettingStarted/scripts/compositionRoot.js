@@ -17,31 +17,17 @@ hilary.use([hilary, jQuery, ko, window], function(hilarysInnerContainer, hilary,
 	// We inject the "mock-ajax" service with a jQuery instance. Then we 
 	// make a fake promise that will be used instead of real ajax.
 	_mockAjax = hilary.resolve('mock-ajax')
-		.call(null, $)
+		.init($)
 		.makePromise([{ id: 1, name: 'Hilary Page' }, { id: 2, name: 'Ole Kirk Kristiansen' }], 40);
-
-	// create a model factory that resolves myModel and injects knockout 
-	// into it, when called
-	hilary.register('myModel', function() {
-		return hilary.resolve('myModelCtor')
-			(ko);
-	});
-
-	// create a view factory that resolves myView and injects jQuery and 
-	// knockout into it, when called
-	hilary.register('myView', function() {
-		return hilary.resolve('myViewCtor')
-			($, ko);
-	}); 
 
 	// Resolve myController and inject our _mockAjax singleton, 
 	// an instance of the model factory and an instance of the 
 	// view factory into it.
 	// In a non-test scenario, we would inject $.ajax instead of _mockAjax
 	_controller = hilary.resolve('myController')
-		.call(null, _mockAjax, 
-			hilary.resolve('myModel').call(), 
-			hilary.resolve('myView').call());
+		.init(_mockAjax, 
+			hilary.resolve('myModelCtor').init(ko), 
+			hilary.resolve('myViewCtor').init($, ko));
 
 	window.example = {
 		load: function() {

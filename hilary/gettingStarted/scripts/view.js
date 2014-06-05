@@ -1,7 +1,7 @@
-hilary.register('myViewCtor', function($, ko) {
+hilary.register('myViewCtor', { init: function($, ko) {
 	return {
-		init: function(model) {
+		bindTo: function(model) {
 			ko.applyBindings(model, $('userExample')[0]);
 		}
 	};
-});
+}});
