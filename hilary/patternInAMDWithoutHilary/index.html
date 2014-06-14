@@ -1,0 +1,139 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Acatar Open Source : " />
+	<title>Hi, I'm Hilary</title>
+    
+    <link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/stylesheet.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="//cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.css" />
+
+    <style type="text/css">
+    	.example {
+    		background-color: white;
+			border: 1px solid #ddd;
+			border-radius: 2px;
+    	}
+    	.example .comments {
+    		background-color: #f2f2f2;
+    		border-bottom: 1px solid #ddd;
+    		padding: 5px;
+    	}
+    	.example .content {
+    		margin: 5px;
+    	}
+    </style>
+  </head>
+
+  <body>
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Acatar/hilaryjs">View on GitHub</a>
+
+          <h1 id="project_title">Getting started with hilary.js</h1>
+          <h2 id="project_tagline"></h2>
+
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+		<p>
+			In this example (check out the <a href="https://github.com/Acatar/acatar.github.io/tree/master/hilary/patternInAmdWithoutHilary">
+			source</a>), we implement the same dependency injection pattern as the <a href="http://acatar.github.io/">other examples</a>, 
+			using only AMD (Asynchronous Module Definition). Namely, require.js.
+		</p> 
+		<p>
+			We have a single Model View Controller structure that is tied together with a composition root.  
+			We also mock jQuery ajax, to get data into the model, without going to the server, to demonstrate the 
+			ease of testing modules using dependency injection and unit-of-work (UOW) patterns.
+		</p>
+
+		<div class="example">
+			<div class="comments">output from the example:</div>
+			<div id="userExample" class="content" data-bind="foreach: users">
+				<p>
+					<i data-bind="text: id"></i>::
+					<i data-bind="text: name"></i>
+				</p>
+			</div>
+		</div>
+		<p>
+			I'm not going to get into what <a href="http://blog.ploeh.dk/2011/07/28/CompositionRoot/">Compsition Root</a> is, but 
+			if you are unfamiliar with the term, <a href="http://blog.ploeh.dk/">Mark Seeman</a> and his book, 
+			<a href="http://www.amazon.com/gp/product/1935182501/ref=as_li_ss_tl?ie=UTF8&camp=1789&creative=390957&creativeASIN=1935182501&linkCode=as2&tag=ploeh-20">Dependency Injection in .NET</a> 
+			should be your goto reference. 
+		</p>
+		<p>
+			In a single page app (SPA), it makes sense to have a single Composition Root file. In a transactional app, each page 
+			might have a Composition Root, although it may be easier to maintain if you also use a single Composition Root and 
+			something along the lines of a feature-flag pattern (which I'm not going to get into). 
+		</p>
+		<p>Let's take a look at the Composition Root for this example, to figure out how it works:</p>
+<pre class="prettyprint">
+require(['jquery', 'ko', 'mock-ajax', 'viewModel', 'view', 'controller'], 
+function( $,        ko,   mockCtor, viewModelCtor, viewCtor, controllerCtor) {
+	"use strict";
+
+	var mocker, ajax, viewModel, view, controller;
+
+	mocker 		= mockCtor.init($);	// create a singleton mocker
+	ajax 		= mocker.makePromise([	// create a mock jQuery ajax signature
+		{ id: 1, name: 'Hilary Page' }, 
+		{ id: 2, name: 'Ole Kirk Kristiansen' }], 
+		40 /**/);
+	viewModel 		= viewModelCtor.init(ko); // create a singleton viewModel
+	view 	   	= function() { return viewCtor.init(ko); };	// create a parameterless view factory
+	controller 	= controllerCtor.init(ajax, viewModel, view); // create a singleton controller
+	
+	controller.action(); // call an action on the controller (i.e. this would load the page content)
+});
+</pre>
+		<br />
+		<p>
+			So this app is made up of a model, a view and a controller.  It depends on jQuery and knockout.
+			We created four service modules: model.js, view.js, controller.js and mock-ajax.js. Each of those 
+			services opts to declare it's dependencies in an init function, rather than using require's auto-resolution.
+		</p>
+		<p>
+			In Composition Root, we not only resolve the services that we intend to use, but also 
+			inject appropriate dependencies. We compose (i.e. construct or initialize) our services into 
+			singletons (the <em>view</em> being an exception) that are used to compose the services that depend on them. The 
+			<em>view</em> returns a parameterless contstructor, so the <em>controller</em> doesn't need to know anything about it's 
+			dependencies, and also so the <em>view</em> does not maintain state in the event that the same <em>action</em> is 
+			called multiple times with different parameters (i.e. <code>usersController.getUser(1)</code> 
+			and <code>usersController.getUser(5)</code>).
+		</p>
+		<p>
+			By taking this approach, it is easy to swap out services for new ones. This can be useful in testing, refactoring, 
+			reuse, etc. The controller service uses jQuery ajax, but because we passed in a mock service that satisfies the 
+			signature, we are able to isolate behavior by changing a single module: compositionRoot.js.
+		</p>
+		<p>
+			Another benefit of this pattern, with respect to how require.js loads the JavaScript files, is that it allows 
+			the browser to optimize loading, rather than require.js. This is because, after we load compositionRoot.js, 
+			the rest of the files are queued up all at once. If we declare the dependencies in each module, then the files 
+			are queued up <em>n<em>-times, depending on how deep the rabbit hole goes.
+		</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script src="http://ajax.aspnetcdn.com/ajax/knockout/knockout-3.1.0.debug.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/prettify/r298/run_prettify.min.js"></script>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.11/require.min.js"></script>
+    <script src="/hilary/patternInAMDWithoutHilary/scripts/requireShim.js"></script>
+    <script src="/hilary/patternInAMDWithoutHilary/scripts/compositionRoot.js"></script>
+  </body>
+</html>

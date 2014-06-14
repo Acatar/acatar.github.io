@@ -1,0 +1,1 @@
+require(["jquery","ko","mock-ajax","viewModel","view","controller"],function(i,e,n,r,t,a){"use strict";var o,c,u,l,m;o=n.init(i),c=o.makePromise([{id:1,name:"Hilary Page"},{id:2,name:"Ole Kirk Kristiansen"}],40),u=r.init(e),l=function(){return t.init(e)},m=a.init(c,u,l),m.action()});

@@ -1,0 +1,1 @@
+You can view this example in action here: http://acatar.github.io/hilary/gettingStartedWithRequire/
