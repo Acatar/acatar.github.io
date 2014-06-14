@@ -459,23 +459,23 @@
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
 		},
+	"\/hilary\/patternInAMDWithoutHilary\/scripts\/min\/viewModel-ck.js": {
+		"fileType": 64,
+		"ignore": 1,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/hilary\/patternInAMDWithoutHilary\/scripts\/min\/viewModel-ck.js",
+		"outputAbbreviatedPath": "\/hilary\/patternInAMDWithoutHilary\/scripts\/min\/min\/viewModel-ck-ck.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
 	"\/hilary\/patternInAMDWithoutHilary\/scripts\/mock-ajax.js": {
 		"fileType": 64,
 		"ignore": 0,
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/hilary\/patternInAMDWithoutHilary\/scripts\/mock-ajax.js",
 		"outputAbbreviatedPath": "\/hilary\/patternInAMDWithoutHilary\/scripts\/min\/mock-ajax-ck.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
-		"syntaxCheckerStyle": 1
-		},
-	"\/hilary\/patternInAMDWithoutHilary\/scripts\/model.js": {
-		"fileType": 64,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/hilary\/patternInAMDWithoutHilary\/scripts\/model.js",
-		"outputAbbreviatedPath": "\/hilary\/patternInAMDWithoutHilary\/scripts\/min\/model-ck.js",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
@@ -498,6 +498,17 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/hilary\/patternInAMDWithoutHilary\/scripts\/view.js",
 		"outputAbbreviatedPath": "\/hilary\/patternInAMDWithoutHilary\/scripts\/min\/view-ck.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/hilary\/patternInAMDWithoutHilary\/scripts\/viewModel.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/hilary\/patternInAMDWithoutHilary\/scripts\/viewModel.js",
+		"outputAbbreviatedPath": "\/hilary\/patternInAMDWithoutHilary\/scripts\/min\/viewModel-ck.js",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,

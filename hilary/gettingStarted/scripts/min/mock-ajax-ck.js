@@ -1,1 +1,1 @@
-hilary.register("mock-ajax",{init:function(e){var n,r,t,i;return n=new e.Deferred,r=n.then(function(e){return e}),t=new e.Deferred,i=t.then(function(e,r){setTimeout(function(){n.resolve(e)},r)}),{makePromise:function(e,n){return function(i){return t.resolve(e,n),r}}}}});
+"use strict";hilary.register("mock-ajax",{init:function(e){var n,r,t;return n=new e.Deferred,r=n.then(function(e){return e}),t=function(e,t){return function(i){return setTimeout(function(){n.resolve(e)},t),r}},{makePromise:t}}});

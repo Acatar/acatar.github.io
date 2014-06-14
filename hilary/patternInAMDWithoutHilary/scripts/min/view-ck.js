@@ -1,1 +1,1 @@
-define("view",function(){var n=function(n){var i={};return i.bindTo=function(i){n.applyBindings(i,$("userExample")[0])},i};return{init:n}});
+define("view",function(){var n=function(n,i){var e={};return e.bindTo=function(e){i.applyBindings(e,n("userExample")[0])},e};return{init:n}});

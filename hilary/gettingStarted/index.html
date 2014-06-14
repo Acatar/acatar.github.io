@@ -44,9 +44,15 @@
 		<p>hello, I'm hilary => a simple JavaScript IoC container.</p>
 
 		<p>
-			In this example (check out the <a href="https://github.com/Acatar/acatar.github.io/tree/master/hilary/gettingStarted">
-			source</a>), we have a single Model View Controller structure that is tied together with a composition root.  We also 
-			mock jQuery ajax, to get data into the model, without going ot the server, to further display the uses of the IoC container.
+			In this example (check out the 
+			<a href="https://github.com/Acatar/acatar.github.io/tree/master/hilary/gettingStarted">source</a>)
+			, we implement a dependency injection pattern using hilary.js.
+		</p> 
+
+		<p>
+			We have a single Model View Controller structure that is composed by a Composition Root.  We also 
+			mock jQuery ajax, to get data into the model without going to the server, to demonstrate the 
+			ease of testing modules using dependency injection and unit-of-work (UOW) patterns.
 		</p>
 
 		<div class="example">
@@ -64,9 +70,9 @@
 			<a href="http://www.amazon.com/gp/product/1935182501/ref=as_li_ss_tl?ie=UTF8&camp=1789&creative=390957&creativeASIN=1935182501&linkCode=as2&tag=ploeh-20">Dependency Injection in .NET</a> should be your goto reference. 
 		</p>
 		<p>
-			In a transactional app, each page might have a Composition Root, although your app would likely be easier to 
-			maintain if you follow the same pattern that makes sense in a SPA, which would be to have a single Composition Root
-			file. I tend to name our Composition Root compositionRoot.js, startup.js or appStart.js.
+			In a single page app (SPA), it makes sense to have a single Composition Root file. In a transactional app, each page 
+			might have a Composition Root, although it may be easier to maintain if you also use a single Composition Root and 
+			something along the lines of a feature-flag pattern (which I'm not going to get into). 
 		</p>
 		<p>Let's take a look at the Composition Root for this example, to figure out how it works:</p>
 <pre class="prettyprint">
@@ -81,9 +87,8 @@
 // require.js, or whatever you want.
 
 hilary.use([hilary, jQuery, ko, window], function(hilarysInnerContainer, hilary, $, ko, window) {
-	"use strict";
 
-	var _mockAjax, _controller;
+	var _mockAjax, _viewModel, _viewFactory, _controller;
 
 	// Resolve a mock jQuery ajax service.
 	// We inject the "mock-ajax" service with a jQuery instance. Then we 
@@ -92,31 +97,43 @@ hilary.use([hilary, jQuery, ko, window], function(hilarysInnerContainer, hilary,
 		.init($)
 		.makePromise([{ id: 1, name: 'Hilary Page' }, { id: 2, name: 'Ole Kirk Kristiansen' }], 40);
 
+	// Resolve a ViewModel singleton, which we will pass to the controller
+	_viewModel = hilary.resolve('myViewModel').init(ko);
+
+	// Create a parameterless factory that resolves a new instance of 
+	// "myView" when it is called so the controller can get a new View 
+	// each time an action is called, and know nothing about the 
+	// View's dependencies
+	_viewFactory = function() { return hilary.resolve('myView').init($, ko); };
+
 	// Resolve myController and inject our _mockAjax singleton, 
 	// an instance of the model factory and an instance of the 
 	// view factory into it.
 	// In a non-test scenario, we would inject $.ajax instead of _mockAjax
 	_controller = hilary.resolve('myController')
-		.init(_mockAjax, 
-			hilary.resolve('myModel').init(ko), 
-			hilary.resolve('myView').init($, ko));
+		.init(_mockAjax, _viewModel, _viewFactory);
+
 });
 </pre>
 		<br />
 		<p>
 			So this app is made up of a model, a view and a controller.  It depends on jQuery and knockout (and hilary :).
-			We created four service modules: model.js, view.js, controller.js and mock-ajax.js.  All four of these services 
-			self-register themselves with hilary when they load.
+			We created four service modules: viewModel.js, view.js, controller.js and mock-ajax.js.  Each of those 
+			services opts to declare it's dependencies in an init function, and self-registers itself with hilary upon load.
 		</p>
 		<p>
 			In a compiled language, we would register interfaces and implementations in our Composition Root, but because 
-			JavaScript is not a compiled language, I took a cue from AMD and decided on  self-registration. During registration, 
+			JavaScript is not a compiled language, I took a cue from AMD and decided on self-registration. During registration, 
 			all of the modules declare their dependencies, but these dependencies are unresolved at the time of registration.
 		</p>
 		<p>
-			In Composition Root, we not only resolve the services that we intend to use, but also inject appropriate dependencies.
-			In this example, we reference a singleton (_mockAjax) and two factories: the composed model and view services. We resolve 
-			"myController" with three, already-composed services.
+			In Composition Root, we not only resolve the services that we intend to use, but also 
+			inject appropriate dependencies. We compose (i.e. construct or initialize) our services into 
+			singletons (the <em>view</em> being an exception) that are used to compose the services that depend on them. The 
+			<em>view</em> returns a parameterless contstructor, so the <em>controller</em> doesn't need to know anything about it's 
+			dependencies, and also so the <em>view</em> does not maintain state in the event that the same <em>action</em> is 
+			called multiple times with different parameters (i.e. <code>usersController.getUser(1)</code> 
+			and <code>usersController.getUser(5)</code>).
 		</p>
 		<p>
 			By taking this approach, it is easy to swap out services for new ones. This can be useful in testing, refactoring, 
@@ -139,7 +156,7 @@ hilary.use([hilary, jQuery, ko, window], function(hilarysInnerContainer, hilary,
 
     <!-- demo scripts -->
     <script src="/hilary/gettingStarted/scripts/hilary.js"></script>
-	<script src="/hilary/gettingStarted/scripts/model.js"></script>
+	<script src="/hilary/gettingStarted/scripts/viewModel.js"></script>
 	<script src="/hilary/gettingStarted/scripts/view.js"></script>
 	<script src="/hilary/gettingStarted/scripts/controller.js"></script>
 	<script src="/hilary/gettingStarted/scripts/mock-ajax.js"></script>
