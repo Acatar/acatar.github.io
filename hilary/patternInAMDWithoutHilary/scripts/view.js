@@ -2,7 +2,7 @@
 // ViewModel binding, DOM manipulation and DOM event handling, like button clicks.
 define('view', function() {
 
-	var ctor = function (ko) {
+	var ctor = function ($, ko) {
 		var _self = {};
 
 		// binds a ViewModel to the DOM

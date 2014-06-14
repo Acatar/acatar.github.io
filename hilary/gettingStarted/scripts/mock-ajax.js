@@ -1,24 +1,34 @@
-hilary.register('mock-ajax', { init: function($) {
-    var _defer, _promise, _realDefer, _realPromise;
+"use strict";
 
-    _defer = new $.Deferred();
-	_promise = _defer.then(function (mockData) {
-    	return mockData;
-	});
+// A mock ajax promise, to satisfy a really simple, happy path ajax request
+hilary.register('mock-ajax', { 
+	// initializes mock ajax
+	// @param $: jQuery
+	init: function($) {
 
-	_realDefer = new $.Deferred();
-	_realPromise = _realDefer.then(function(mockData, timeout) {
-		setTimeout(function() {
-			_defer.resolve(mockData);
-		}, timeout);
-	});
+	    var _defer, _promise, makePromise;
 
-	return {
-		makePromise: function (mockData, timeout) {
+	    // create the mock ajax promise, which will be returned to the caller
+	    _defer = new $.Deferred();
+		_promise = _defer.then(function (mockData) {
+	    	return mockData;
+		});
+
+		// make a promise that will return a given data set, afteer a given timeout
+		// @param mockData: a value that meets the signature of what would be returned by the server
+		// @param timeout: the time, in milliseconds, to wait before returning the result.
+		makePromise = function (mockData, timeout) {
 			return function(options) {
-				_realDefer.resolve(mockData, timeout);
+				setTimeout(function() {
+					_defer.resolve(mockData);
+				}, timeout);
 				return _promise;
 			};
-		}
-	};
-}});
+		};
+
+		return {
+			makePromise: makePromise
+		};
+
+	} // /init
+});

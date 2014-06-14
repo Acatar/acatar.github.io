@@ -1,3 +1,5 @@
+"use strict";
+
 // hilary.use lets us pass in window dependencies, similar to the standard 
 // module pattern, except that the dependencies and the function arguments 
 // that they resolve to are right next to each other. 
@@ -9,9 +11,8 @@
 // require.js, or whatever you want.
 
 hilary.use([hilary, jQuery, ko, window], function(hilarysInnerContainer, hilary, $, ko, window) {
-	"use strict";
 
-	var _mockAjax, _controller;
+	var _mockAjax, _viewModel, _viewFactory, _controller;
 
 	// Resolve a mock jQuery ajax service.
 	// We inject the "mock-ajax" service with a jQuery instance. Then we 
@@ -20,18 +21,25 @@ hilary.use([hilary, jQuery, ko, window], function(hilarysInnerContainer, hilary,
 		.init($)
 		.makePromise([{ id: 1, name: 'Hilary Page' }, { id: 2, name: 'Ole Kirk Kristiansen' }], 40);
 
+	// Resolve a ViewModel singleton, which we will pass to the controller
+	_viewModel = hilary.resolve('myViewModel').init(ko);
+
+	// Create a parameterless factory that resolves a new instance of 
+	// "myView" when it is called so the controller can get a new View 
+	// each time an action is called, and know nothing about the 
+	// View's dependencies
+	_viewFactory = function() { return hilary.resolve('myView').init($, ko); };
+
 	// Resolve myController and inject our _mockAjax singleton, 
 	// an instance of the model factory and an instance of the 
 	// view factory into it.
 	// In a non-test scenario, we would inject $.ajax instead of _mockAjax
 	_controller = hilary.resolve('myController')
-		.init(_mockAjax, 
-			hilary.resolve('myModel').init(ko), 
-			hilary.resolve('myView').init($, ko));
+		.init(_mockAjax, _viewModel, _viewFactory);
 
 	window.example = {
 		load: function() {
-			_controller.view();
+			_controller.action();
 		}
 	};	
 });

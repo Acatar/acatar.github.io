@@ -10,7 +10,7 @@ function( $,        ko,   mockCtor, viewModelCtor, viewCtor, controllerCtor) {
 		{ id: 2, name: 'Ole Kirk Kristiansen' }], 
 		40 /**/);
 	viewModel 		= viewModelCtor.init(ko);							// create a singleton viewModel
-	view 	   	= function() { return viewCtor.init(ko); };				// create a parameterless view factory
+	view 	   	= function() { return viewCtor.init($, ko); };			// create a parameterless view factory
 	controller 	= controllerCtor.init(ajax, viewModel, view);			// create a singleton controller
 	
 	controller.action();												// call an action on the controller 

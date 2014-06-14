@@ -47,8 +47,8 @@
 			using only AMD (Asynchronous Module Definition). Namely, require.js.
 		</p> 
 		<p>
-			We have a single Model View Controller structure that is tied together with a composition root.  
-			We also mock jQuery ajax, to get data into the model, without going to the server, to demonstrate the 
+			We have a single Model View Controller structure that is composed by a Composition Root.  
+			We also mock jQuery ajax, to get data into the model without going to the server, to demonstrate the 
 			ease of testing modules using dependency injection and unit-of-work (UOW) patterns.
 		</p>
 
@@ -95,7 +95,7 @@ function( $,        ko,   mockCtor, viewModelCtor, viewCtor, controllerCtor) {
 		<br />
 		<p>
 			So this app is made up of a model, a view and a controller.  It depends on jQuery and knockout.
-			We created four service modules: model.js, view.js, controller.js and mock-ajax.js. Each of those 
+			We created four service modules: viewModel.js, view.js, controller.js and mock-ajax.js. Each of those 
 			services opts to declare it's dependencies in an init function, rather than using require's auto-resolution.
 		</p>
 		<p>

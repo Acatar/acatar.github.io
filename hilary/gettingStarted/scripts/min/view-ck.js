@@ -1,1 +1,1 @@
-hilary.register("myView",{init:function(i,n){return{bindTo:function(e){n.applyBindings(e,i("userExample")[0])}}}});
+"use strict";hilary.register("myView",{init:function(i,n){var r=function(r){n.applyBindings(r,i("userExample")[0])};return{bindTo:r}}});
