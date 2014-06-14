@@ -1,0 +1,1 @@
+define("controller",function(){var n=function(n,o,r){var t={};return t.action=function(){return n({url:"foo/bar/12",method:"GET"}).done(function(n){var t,e;t=o.fromModel(n),e=r(),e.bindTo(t)})},t};return{init:n}});

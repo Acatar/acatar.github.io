@@ -1,0 +1,1 @@
+define("mock-ajax",["jquery"],function(n){var e=function(n){var e,r,t,u,i={};return e=new n.Deferred,r=e.then(function(n){return n}),i.makePromise=function(n,t){return function(u){return setTimeout(function(){e.resolve(n)},t),r}},i};return{init:e}});
